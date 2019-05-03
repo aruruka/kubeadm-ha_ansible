@@ -1,0 +1,33 @@
+---
+# file: roles/install_docker/tasks/main.yml
+
+- name: "Installing Docker Prerequisite packages"
+  yum:
+  name: "{{ item }}"
+  state: latest
+  with_items:
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2
+
+- name: "Copy docker rpm files to server"
+  copy:
+    src: docker_rpm
+    dest: /tmp
+    directory_mode: yes
+
+- name: " Installing Docker latest version"
+  yum:
+    name: "/tmp/docker_rpm/{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - containerd.io-1.2.5-3.1.el7.x86_64.rpm
+    - docker-ce-18.09.5-3.el7.x86_64.rpm
+    - docker-ce-cli-18.09.5-3.el7.x86_64.rpm
+
+- name: " Starting and Enabling Docker service"
+  service:
+    name: docker
+    state: started
+    enabled: yes

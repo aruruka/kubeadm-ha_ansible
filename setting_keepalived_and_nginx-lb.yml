@@ -1,0 +1,7 @@
+---
+# file: setting_keepalived_and_nginx-lb.yml
+
+- name: Setting keepalived and nginx-lb
+  hosts: control-plane
+  roles:
+  - setting_keepalived_and_nginx-lb

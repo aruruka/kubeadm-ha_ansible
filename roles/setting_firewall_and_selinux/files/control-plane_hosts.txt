@@ -1,0 +1,7 @@
+# k8s ha host alias
+30.99.142.161    master-vip.local
+30.99.142.166    master-01.local
+30.99.142.164    master-02.local
+30.99.142.162    master-03.local
+30.99.142.165    sysnode-01.local
+30.99.142.163    sysnode-02.local

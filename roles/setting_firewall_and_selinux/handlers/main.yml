@@ -1,0 +1,9 @@
+---
+# file: roles/firewall_and_selinux/handlers/main.yml
+
+- name: Add control-plane host alias to /etc/hosts
+  shell: cat control-plane_hosts.txt >> /etc/hosts
+    chdir: /tmp
+
+- name: Unconditionally reboot the machine with all defaults
+  reboot:

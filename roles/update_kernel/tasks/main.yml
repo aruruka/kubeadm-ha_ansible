@@ -1,0 +1,14 @@
+---
+# file: roles/update_kernel/tasks/main.yml
+
+- name: Copy kernel tar.gz to remote server
+  copy:
+    src: kernel-ml-5.0.4.tgz
+    dest: /tmp/kernel-ml-5.0.4.tgz
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Run the update_kernel script
+    - Unconditionally reboot the machine with all defaults
+

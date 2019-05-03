@@ -1,0 +1,28 @@
+---
+# file: roles/install_k8s-rpm/tasks/main.yml
+
+- name: "Copy k8s-v1.14 tar.gz to server"
+  copy:
+    src: k8s-v1.14.0-rpms.tgz
+    dest: /tmp
+  register: copy_k8s-tar-gz
+
+- name: "Extract k8s-v1.14 tar.gz"
+  shell: tar -xzvf k8s-v1.14.0-rpms.tgz
+  chdir: /tmp
+  register: extract_k8s-tar-gz
+  when: copy_k8s-tar-gz.changed
+
+- name: " Installing kubelet kubeadm kubectl"
+  yum:
+    name: "/tmp/k8s-v1.14.0/{{ packages }}"
+    state: present
+  vars:
+    packages:
+    - 6089961a11403e579c547532462e16b1bb1f97ec539e4671c4c15f377c427c18-kubelet-1.14.0-0.x86_64.rpm
+    - 53edc739a0e51a4c17794de26b13ee5df939bd3161b37f503fe2af8980b41a89-cri-tools-1.12.0-0.x86_64.rpm
+    - 548a0dcd865c16a50980420ddfa5fbccb8b59621179798e6dc905c9bf8af3b34-kubernetes-cni-0.7.5-0.x86_64.rpm
+    - fea2c041b42bef6e4de4ee45eee4456236f2feb3d66572ac310f857676fe9598-kubeadm-1.14.0-0.x86_64.rpm
+    - 2b52e839216dfc620bd1429cdb87d08d00516eaa75597ad4491a9c1e7db3c392-kubectl-1.14.0-0.x86_64.rpm
+  when: extract_k8s-tar-gz.changed
+

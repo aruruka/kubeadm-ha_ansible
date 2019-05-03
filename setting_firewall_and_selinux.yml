@@ -1,0 +1,7 @@
+---
+# file: setting_firewall_and_selinux.yml
+
+- name: Setting firewall and selinux
+  hosts: control-plane:etcd:sysnode
+  roles:
+  - setting_firewall_and_selinux

@@ -1,0 +1,51 @@
+---
+# file: roles/setting_keepalived_and_nginx-lb/tasks/main.yml
+
+- name: "Install keepalived"
+  yum:
+    name: keepalived
+    state: present
+  register: installed_keepalived
+
+- name: "Start and enable keepalived"
+  service:
+    name: keepalived
+    state: started
+    enabled: yes
+  when: installed_keepalived.changed
+  register: start_and_enable_keepalived
+
+- name: "Copy keepalived and nginx-lb conf and init script to server"
+  copy:
+    src: "{{ files_and_directories }}"
+    dest: /tmp
+    directory_mode: yes
+  vars:
+    files_and_directories:
+    - create-config.sh
+    - kubeadm-config.yaml.tpl
+    - calico
+    - keepalived
+    - nginx-lb
+  when: start_and_enable_keepalived.changed
+  register: copy_keepalived_and_nginx-lb_files
+
+- name: "Initiate keepalived"
+  shell: create-config.sh
+    chdir: /tmp
+  when: copy_keepalived_and_nginx-lb_files.changed
+  register: initiate_keepalived
+
+- name: "Restart keepalived"
+  service:
+    name: keepalived
+    state: restarted
+
+- name: "Copy docker-compose executable to server"
+  copy:
+    src: docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+
+- name: "Start nginx-lb"
+  shell: docker-compose up -d
+    chdir: /root/nginx-lb

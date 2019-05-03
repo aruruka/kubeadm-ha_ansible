@@ -1,0 +1,15 @@
+# production/ansible_hosts.txt
+
+[control-plane]
+30.99.142.166    ansible_ssh_user=root
+30.99.142.164    ansible_ssh_user=root
+30.99.142.162    ansible_ssh_user=root
+
+[etcd]
+30.99.142.166    ansible_ssh_user=root
+30.99.142.164    ansible_ssh_user=root
+30.99.142.162    ansible_ssh_user=root
+
+[sysnode]
+30.99.142.165    ansible_ssh_user=root
+30.99.142.163    ansible_ssh_user=root

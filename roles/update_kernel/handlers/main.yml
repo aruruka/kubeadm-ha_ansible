@@ -1,0 +1,8 @@
+---
+# file: roles/update_kernel/handlers/main.yml
+
+- name: Run the update_kernel script
+  script: update_kernel.sh
+
+- name: Unconditionally reboot the machine with all defaults
+  reboot:

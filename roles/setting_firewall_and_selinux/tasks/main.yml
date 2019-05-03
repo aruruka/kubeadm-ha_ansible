@@ -1,0 +1,149 @@
+---
+# file: roles/firewall_and_selinux/tasks/main.yml
+
+- name: Start and enable service firewalld, if not started
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Add control-plane firewall port 16443/tcp
+  firewalld:
+    rich_rule: rule family={{ item }}
+    zone:      public
+    port:      16443/tcp
+    permanent: yes
+    immediate: yes
+    state:     enabled
+  with_items:
+    - ipv4
+    - ipv6
+  when: inventory_hostname in groups.control-plane
+
+- name: Add control-plane firewall port 6443/tcp
+  firewalld:
+    rich_rule: rule family={{ item }}
+    zone:      public
+    port:      6443/tcp
+    permanent: yes
+    immediate: yes
+    state:     enabled
+  with_items:
+    - ipv4
+    - ipv6
+  when: inventory_hostname in groups.control-plane
+
+- name: Add control-plane firewall port 4001/tcp
+  firewalld:
+    rich_rule: rule family={{ item }}
+    zone:      public
+    port:      4001/tcp
+    permanent: yes
+    immediate: yes
+    state:     enabled
+  with_items:
+    - ipv4
+    - ipv6
+  when: inventory_hostname in groups.etcd
+
+- name: Add control-plane firewall port 2379-2380/tcp
+  firewalld:
+    rich_rule: rule family={{ item }}
+    zone:      public
+    port:      2379-2380/tcp
+    permanent: yes
+    immediate: yes
+    state:     enabled
+  with_items:
+    - ipv4
+    - ipv6
+  when: inventory_hostname in groups.etcd
+
+- name: Add control-plane firewall port 10250/tcp
+  firewalld:
+    rich_rule: rule family={{ item }}
+    zone:      public
+    port:      10250/tcp
+    permanent: yes
+    immediate: yes
+    state:     enabled
+  with_items:
+    - ipv4
+    - ipv6
+
+- name: Add control-plane firewall port 10251-10252/tcp
+  firewalld:
+    rich_rule: rule family={{ item }}
+    zone:      public
+    port:      10251-10252/tcp
+    permanent: yes
+    immediate: yes
+    state:     enabled
+  with_items:
+    - ipv4
+    - ipv6
+  when: inventory_hostname in groups.control-plane
+
+- name: Add control-plane firewall port 30000-32767/tcp
+  firewalld:
+    rich_rule: rule family={{ item }}
+    zone:      public
+    port:      30000-32767/tcp
+    permanent: yes
+    immediate: yes
+    state:     enabled
+  with_items:
+    - ipv4
+    - ipv6
+
+- name: Add crontab for preventing iptables being reseted since firewalld restarting
+  cron:
+    name: "preventing iptables being reseted"
+    job: "/usr/sbin/iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited"
+
+- name: Copy control-plane host alias file to remote host
+  copy:
+    src: control-plane_hosts.txt
+    dest: /tmp/control-plane_hosts.txt
+    owner: root
+    group: root
+  notify:
+    - Add control-plane host alias to /etc/hosts
+
+# Put SELinux in permissive mode, logging actions that would be blocked.
+- name: Put SELinux in permissive mode
+  selinux:
+    policy: targeted
+    state: permissive
+
+# Enable net bridge nf call via ip6tables
+- name: Enable net bridge nf call via ip6tables
+  sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Enable net bridge nf call via iptables
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+  register: bridge-nf-call-iptables
+
+- name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+  shell: |
+    swapoff -a
+  when: bridge-nf-call-iptables.changed
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^(.+?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+  when: bridge-nf-call-iptables.changed
+  notify:
+    - Unconditionally reboot the machine with all defaults

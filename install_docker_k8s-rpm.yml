@@ -1,0 +1,6 @@
+# install_docker_k8s-rpm.yml
+
+- hosts: control-plane:etcd:sysnode
+  roles:
+    - install_docker
+    - install_k8s-rpm
