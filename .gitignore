@@ -1,0 +1,15 @@
+
+roles/load_image/files/calico_kube-controllers_v3.6.tar
+roles/load_image/files/k8s.gcr.io_coredns_1.3.1.tar
+roles/load_image/files/k8s.gcr.io_etcd_3.3.10.tar
+roles/load_image/files/k8s.gcr.io_heapster-grafana_v5.0.4.tar
+roles/load_image/files/k8s.gcr.io_heapster-influxdb_v1.5.2.tar
+roles/load_image/files/k8s.gcr.io_heapster_v1.5.4.tar
+roles/load_image/files/k8s.gcr.io_kube-apiserver_v1.14.tar
+roles/load_image/files/k8s.gcr.io_kube-controller-manager_v1.14.tar
+roles/load_image/files/k8s.gcr.io_kube-proxy_v1.14.tar
+roles/load_image/files/k8s.gcr.io_kube-scheduler_v1.14.tar
+roles/load_image/files/k8s.gcr.io_kubernetes-dashboard_v1.10.1.tar
+roles/load_image/files/k8s.gcr.io_pause_3.1.tar
+roles/load_image/files/k8s_images.7z
+roles/load_image/files/quay.io_coreos_flannel_v0.11.tar
