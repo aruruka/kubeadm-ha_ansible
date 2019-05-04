@@ -1,0 +1,12 @@
+---
+# file: roles/load_image/tasks/main.yml
+
+- name: Copy k8s image 7z to server and extract it
+  block:
+    - copy:
+        src: k8s_images.7z
+        dest: /tmp
+    - yum:
+        name: p7zip
+    - shell: 7z x k8s_images.7z -ok8s_images
+        chdir: /tmp
