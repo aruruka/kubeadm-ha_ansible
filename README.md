@@ -66,9 +66,21 @@ reboot
 
 ### 设置 keepalived 和 nginx-lb 来实现 vip 和负载均衡
 
+-   [百度网盘](https://pan.baidu.com/s/174rRZRBi5XgsLVE82Wk6VQ)
+
+    提取码：y9nt 
+    复制这段内容后打开百度网盘手机App，操作更方便哦
+    从上面百度网盘链接下载 nginx 镜像 `nginx_latest.tar`，放在 `roles\setting_keepalived_and_nginx-lb\files` 中。
+
 ```
 ansible-playbook -i production/ansible_hosts.txt setting_keepalived_and_nginx-lb.yml
 ```
 
+### 在节点上导入 k8s 镜像
 
+-   [百度网盘](https://pan.baidu.com/s/15CSbS6ZR80X2F3nwk4j1cw)
+
+    提取码：cm0p 
+    复制这段内容后打开百度网盘手机App，操作更方便哦
+    从上面百度网盘链接下载 k8s 系统所需镜像的压缩包 `images.7z`，放在 `roles\load_image\files` 中。
 
