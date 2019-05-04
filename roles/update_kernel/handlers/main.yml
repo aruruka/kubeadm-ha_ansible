@@ -4,5 +4,5 @@
 - name: Run the update_kernel script
   script: update_kernel.sh
 
-- name: Unconditionally reboot the machine with all defaults
-  reboot:
+# - name: Unconditionally reboot the machine with all defaults
+#   reboot:

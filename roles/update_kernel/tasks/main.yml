@@ -10,5 +10,5 @@
     mode: 0644
   notify:
     - Run the update_kernel script
-    - Unconditionally reboot the machine with all defaults
+    # - Unconditionally reboot the machine with all defaults
 

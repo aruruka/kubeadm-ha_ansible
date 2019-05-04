@@ -41,11 +41,29 @@
     name: keepalived
     state: restarted
 
+- name: "Copy nginx image to server"
+  copy:
+    src: nginx_latest.tar
+    dest: /tmp
+  register: copy_nginx_image
+
+- name: "Load nginx image on server"
+  shell: docker load -i nginx_latest.tar
+    chdir: /tmp
+  when: copy_nginx_image.changed
+  register: load_nginx_image
+
 - name: "Copy docker-compose executable to server"
   copy:
     src: docker-compose-Linux-x86_64
     dest: /usr/local/bin/docker-compose
+    owner: root
+    group: root
+    mode: 0755
+  when: load_nginx_image.changed
+  register: copy_docker-compose
 
 - name: "Start nginx-lb"
   shell: docker-compose up -d
     chdir: /root/nginx-lb
+  when: copy_docker-compose.changed

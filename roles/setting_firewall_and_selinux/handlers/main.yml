@@ -5,5 +5,5 @@
   shell: cat control-plane_hosts.txt >> /etc/hosts
     chdir: /tmp
 
-- name: Unconditionally reboot the machine with all defaults
-  reboot:
+# - name: Unconditionally reboot the machine with all defaults
+#   reboot:

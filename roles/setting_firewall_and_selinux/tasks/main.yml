@@ -145,5 +145,5 @@
     regexp: '^(.+?\sswap\s+sw\s+.*)$'
     replace: '# \1'
   when: bridge-nf-call-iptables.changed
-  notify:
-    - Unconditionally reboot the machine with all defaults
+  # notify:
+  #   - Unconditionally reboot the machine with all defaults
