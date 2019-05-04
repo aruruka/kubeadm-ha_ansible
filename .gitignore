@@ -13,3 +13,4 @@ roles/load_image/files/k8s.gcr.io_kubernetes-dashboard_v1.10.1.tar
 roles/load_image/files/k8s.gcr.io_pause_3.1.tar
 roles/load_image/files/k8s_images.7z
 roles/load_image/files/quay.io_coreos_flannel_v0.11.tar
+*.tar
