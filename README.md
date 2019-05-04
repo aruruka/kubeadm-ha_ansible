@@ -44,6 +44,11 @@ kernel 5.0 支持一些新功能和驱动，升级方法如下:
 
 ```
 ansible-playbook -i production/ansible_hosts.txt update_kernel.yml
+# 这个过程中需要重启机器
+# 先批量重启其他几个机器
+ansible -i production/ansible_hosts.txt control-plane:etcd:sysnode:!localhost -a "reboot"
+# 再重启本机
+reboot
 ```
 
 ## 修改集群相关信息以及执行安装用 playbook
@@ -52,6 +57,11 @@ ansible-playbook -i production/ansible_hosts.txt update_kernel.yml
 
 ```
 ansible-playbook -i production/ansible_hosts.txt setting_firewall_and_selinux.yml
+# 这个过程中需要重启机器
+# 先批量重启其他几个机器
+ansible -i production/ansible_hosts.txt control-plane:etcd:sysnode:!localhost -a "reboot"
+# 再重启本机
+reboot
 ```
 
 ### 设置 keepalived 和 nginx-lb 来实现 vip 和负载均衡
